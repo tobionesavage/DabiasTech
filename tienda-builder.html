@@ -28,7 +28,7 @@ a { color: inherit; }
 .top {
   position: sticky; top: 0; z-index: 40;
   display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-  padding: 12px 18px;
+  padding: 12px 18px; padding-top: max(12px, env(safe-area-inset-top));
   background: color-mix(in srgb, var(--card) 88%, transparent);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--bd);
@@ -44,13 +44,50 @@ a { color: inherit; }
 
 .wrap {
   display: grid;
-  grid-template-columns: minmax(280px, 380px) 1fr;
+  grid-template-columns: minmax(280px, 400px) 1fr;
   gap: 0;
   min-height: calc(100vh - 53px);
 }
 @media (max-width: 900px) {
-  .wrap { grid-template-columns: 1fr; }
-  .preview-pane { min-height: 70vh; border-top: 1px solid var(--bd); }
+  .wrap {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+  .editor {
+    max-height: none !important;
+    border-right: 0 !important;
+    padding-bottom: 24px;
+  }
+  .preview-pane {
+    min-height: 65vh;
+    border-top: 1px solid var(--bd);
+    position: sticky;
+    bottom: 0;
+  }
+  .preview-frame { min-height: 60vh; }
+  .top {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+  .top b { font-size: 14px; }
+  .top .badge { display: none; }
+  .top .btn.sm { padding: 8px 12px; font-size: 12px; min-height: 40px; }
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+  }
+  .step {
+    min-width: 0;
+    padding: 8px 2px;
+    font-size: 10px;
+    line-height: 1.2;
+  }
+  .btn { min-height: 44px; }
+  .btn-row { flex-direction: column; }
+  .btn-row .btn { width: 100%; }
+  .field { font-size: 16px; padding: 12px; }
+  .prod { flex-wrap: wrap; }
 }
 
 .editor {

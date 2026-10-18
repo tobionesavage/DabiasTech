@@ -272,6 +272,20 @@ body { padding-bottom: env(safe-area-inset-bottom, 0px); }
 .dt-back a:hover{opacity:1;text-decoration:underline}
 .dt-back span{opacity:.65;font-weight:400}
 @media(max-width:560px){.dt-back span{display:none}}
+
+/* of-mobile-opt */
+@media (max-width: 560px) {
+  .nav-inner { padding: 0 10px; }
+  .tab { padding: 8px 10px; font-size: 12px; min-height: 40px; }
+  main { padding: 12px 12px 110px; }
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .pc-body { padding: 10px; }
+  .btn-p { min-height: 42px; padding: 10px; }
+  .card { padding: 14px; }
+  .field { font-size: 16px; }
+  .board { grid-template-columns: repeat(4, minmax(180px, 1fr)); }
+  .dt-back { padding: 10px 12px; padding-top: max(10px, env(safe-area-inset-top)); }
+}
 </style>
 </head>
 <body>
