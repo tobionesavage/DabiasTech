@@ -457,7 +457,7 @@ function addMenuItem(){const n=$('#mp_n').value.trim(),c=$('#mp_c').value.trim()
 function delMenuItem(id){P=P.filter(x=>x.id!==id);delete cart[id];sv('menu',P);sv('cart',cart);renderMenuList();G();C()}
 function toggleTheme(){const dark=document.documentElement.getAttribute('data-theme')==='dark';document.documentElement.setAttribute('data-theme',dark?'light':'dark');try{localStorage.setItem('of2_theme',dark?'light':'dark')}catch(e){}}
 function R(){$('#c').hidden=view!=='c';$('#b').hidden=view!=='b';$$('.tab[data-v]').forEach(t=>t.classList.toggle('on',t.dataset.v===view));$('#a1').checked=!!auto.a;$('#a2').checked=!!auto.b;$('#a3').checked=!!auto.sound;MO();if(view==='b')B();C()}
-setInterval(()=>{let ch=0;orders.forEach(o=>{if(auto.a&&o.st===0){o.st=1;o.t=Date.now();ch=1}else if(auto.b&&o.st>0&&o.st<3&&Date.now()-o.t>7000){o.st++;o.t=Date.now();ch=1}});if(ch){sv('orders',orders);R()}},3000);
+setInterval(()=>{let ch=0;orders.forEach(o=>{if(auto.a&&o.st===0){o.st=1;o.t=Date.now();ch=1}else if(auto.b&&o.st>0&&o.st<3&&Date.now()-o.t>7000){o.st++;o.t=Date.now();ch=1}});if(ch){sv('orders',orders);R()}},4000);
 window.addEventListener('resize',C);
 try{const t=localStorage.getItem('of2_theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}
 // skeleton inicial breve

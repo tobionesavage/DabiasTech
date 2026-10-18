@@ -162,13 +162,20 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 let me = null, profile = null, sites = [], view = 'home', isAdm = false, wz = {c: COL[0]}, nx = null, loading = false;
 
 async function init() {
-  const { data: { session } } = await sb.auth.getSession();
-  if (session) { me = session.user; await loadProfile(); await loadSites(); }
-  sb.auth.onAuthStateChange(async (event, session) => {
-    if (event === 'SIGNED_IN' && session) { me = session.user; await loadProfile(); await loadSites(); R(); }
-    else if (event === 'SIGNED_OUT') { me = null; profile = null; sites = []; isAdm = false; R(); }
-  });
-  R(); setupReveal(); setupNavScroll();
+  // UI primero (percepción de velocidad), auth después
+  setupNavScroll();
+  R();
+  setupReveal();
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) { me = session.user; await loadProfile(); await loadSites(); R(); }
+    sb.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN' && session) { me = session.user; await loadProfile(); await loadSites(); R(); }
+      else if (event === 'SIGNED_OUT') { me = null; profile = null; sites = []; isAdm = false; R(); }
+    });
+  } catch (e) {
+    console.warn('Supabase offline — modo local', e);
+  }
 }
 async function loadProfile() {
   if (!me) return;
@@ -188,22 +195,37 @@ async function loadSites() {
     }
   }
 }
+let _revealIO = null;
 function setupReveal() {
   const els = document.querySelectorAll('.reveal:not(.visible), .reveal-stagger:not(.visible)');
   if (!els.length) return;
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        io.unobserve(e.target);
+  if (!_revealIO) {
+    _revealIO = new IntersectionObserver((entries) => {
+      for (let i = 0; i < entries.length; i++) {
+        const e = entries[i];
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          _revealIO.unobserve(e.target);
+        }
       }
-    });
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-  els.forEach(el => io.observe(el));
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  }
+  for (let i = 0; i < els.length; i++) _revealIO.observe(els[i]);
 }
 function setupNavScroll() {
   const nav = $('navbar');
-  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 10); }, { passive: true });
+  if (!nav) return;
+  let ticking = false;
+  let last = false;
+  window.addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const on = window.scrollY > 10;
+      if (on !== last) { nav.classList.toggle('scrolled', on); last = on; }
+      ticking = false;
+    });
+  }, { passive: true });
 }
 function go(v) {
   if (v === 'dash' && !me) return showAuth();
@@ -213,15 +235,13 @@ function go(v) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
-function R() {
-  ['home','dash','adm'].forEach(k => $(k).hidden = view !== k);
-  $('nb').textContent = me ? 'Mi cuenta' : 'Ingresar';
-  $('nb').onclick = () => go('dash');
-  $('wa').href = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(WA_MSG);
-  const waF = $('waFloat');
-  if (waF) waF.href = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(WA_MSG);
-  $('rb').innerHTML = Object.values(RB).map(r => `<span class="chip">${r[1]} ${r[0]}</span>`).join('');
-  $('pl').innerHTML = PL.map(x => `
+let _homeStatic = false;
+let _waHref = '';
+function renderHomeStatic() {
+  if (_homeStatic) return;
+  const rb = $('rb'), pl = $('pl');
+  if (rb) rb.innerHTML = Object.values(RB).map(r => `<span class="chip">${r[1]} ${r[0]}</span>`).join('');
+  if (pl) pl.innerHTML = PL.map(x => `
     <div class="c pl ${x.star?'f':''}">
       ${x.star?'<span class="tag">Más elegido</span>':''}
       <h3>${x.n}</h3>
@@ -229,9 +249,30 @@ function R() {
       <ul>${x.f.map(i=>`<li>${i}</li>`).join('')}</ul>
       <button class="btn ${x.star?'ac':'o'}" onclick="wiz('${x.k}')">Elegir ${x.n}</button>
     </div>`).join('');
+  _homeStatic = true;
+}
+function R() {
+  const views = ['home','dash','adm'];
+  for (let i = 0; i < views.length; i++) {
+    const el = $(views[i]);
+    if (el) el.hidden = view !== views[i];
+  }
+  const nb = $('nb');
+  if (nb) {
+    const label = me ? 'Mi cuenta' : 'Ingresar';
+    if (nb.textContent !== label) nb.textContent = label;
+    nb.onclick = () => go('dash');
+  }
+  const href = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(WA_MSG);
+  if (href !== _waHref) {
+    _waHref = href;
+    const wa = $('wa'); if (wa) wa.href = href;
+    const waF = $('waFloat'); if (waF) waF.href = href;
+  }
+  if (view === 'home') renderHomeStatic();
   if (view === 'dash') renderDash();
   if (view === 'adm') renderAdmin();
-  requestAnimationFrame(() => setupReveal());
+  if (view === 'home') requestAnimationFrame(() => setupReveal());
 }
 function showAuth(mode = 'login') {
   const isLogin = mode === 'login';
@@ -533,4 +574,3 @@ async function se(id, status) {
 init();
 </script>
 </body>
-</html>
