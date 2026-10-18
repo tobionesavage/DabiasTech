@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OrderFlow · Sistema de pedidos para tu negocio · DabiasTech</title>
+<style>
+:root{--bg:#fafafa;--card:#fff;--tx:#18181b;--mu:#6b6b72;--ac:#e11d48;--bd:#e4e4e8;--ok:#16a34a;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101012;--card:#1b1b1e;--tx:#f4f4f5;--mu:#a0a0a8;--bd:#2c2c31;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#101012;--card:#1b1b1e;--tx:#f4f4f5;--mu:#a0a0a8;--bd:#2c2c31;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.w{max-width:1040px;margin:0 auto;padding:0 18px}
+nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+nav b{font-size:20px}nav small{color:var(--mu);margin-left:6px}
+.hero{text-align:center;padding:48px 0 36px}
+.hero h1{font-size:clamp(30px,6vw,52px);line-height:1.1;margin:0 0 14px}
+.hero h1 em{color:var(--ac);font-style:normal}
+.hero p{color:var(--mu);max-width:620px;margin:0 auto 24px;font-size:18px}
+.btn{display:inline-block;background:var(--ac);color:#fff;text-decoration:none;border:0;border-radius:12px;padding:13px 22px;font:600 16px inherit;cursor:pointer;margin:4px}
+.btn.o{background:transparent;color:var(--tx);border:1px solid var(--bd)}
+section{padding:36px 0}
+h2{font-size:clamp(24px,4vw,34px);text-align:center;margin:0 0 8px}
+.sub{text-align:center;color:var(--mu);margin:0 0 26px}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:20px}
+.c .i{font-size:30px}.c h3{margin:8px 0 4px;font-size:18px}.c p{margin:0;color:var(--mu)}
+.n{width:34px;height:34px;border-radius:50%;background:var(--ac);color:#fff;display:grid;place-items:center;font-weight:700}
+.calc{max-width:640px;margin:0 auto}
+label{display:block;font-weight:600;margin:12px 0 4px;font-size:14px}
+input[type=number]{width:100%;padding:11px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit}
+.res{margin-top:16px;padding:16px;border-radius:12px;background:var(--bg);border:1px dashed var(--ac)}
+.res b{font-size:26px;color:var(--ok);display:block}
+.pl.f{border:2px solid var(--ac);position:relative}
+.pl .p{font-size:30px;font-weight:800;margin:6px 0}.pl .p small{font-size:14px;font-weight:400;color:var(--mu)}
+.pl ul{padding-left:20px;margin:10px 0 16px;color:var(--mu)}
+.tag{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--ac);color:#fff;font-size:12px;font-weight:700;padding:3px 12px;border-radius:10px}
+.pl .btn{display:block;text-align:center;margin:0}
+.cta{text-align:center;background:var(--ac);color:#fff;border-radius:20px;padding:36px 18px}
+.cta .btn{background:#fff;color:var(--ac)}
+footer{text-align:center;color:var(--mu);font-size:13px;padding:26px 0}
+</style></head><body>
+<div class="w">
+<nav><div><b>🛵 OrderFlow</b><small>by DabiasTech</small></div><a class="btn o" style="padding:8px 16px;margin:0" href="#planes">Planes</a></nav>
+
+<div class="hero">
+ <h1>Recibí pedidos online <em>sin pagar comisiones</em> por cada venta</h1>
+ <p>Tu propio sistema de pedidos tipo PedidosYa, con tu marca, tu menú y tus clientes. Panel simple, pedidos automáticos y seguimiento en tiempo real.</p>
+ <a class="btn" id="demo" href="#" target="_blank" rel="noopener">▶ Ver demo en vivo</a>
+ <a class="btn o" class="wa" href="#" data-wa="Hola! Quiero información sobre OrderFlow para mi negocio">💬 Hablar por WhatsApp</a>
+</div>
+
+<section><h2>Todo lo que tu negocio necesita</h2><p class="sub">Simple para tus clientes. Fácil para tu equipo.</p>
+<div class="g">
+ <div class="c"><div class="i">📱</div><h3>Menú online con tu marca</h3><p>Categorías, buscador y carrito. Tus clientes piden desde el celular en segundos.</p></div>
+ <div class="c"><div class="i">🧾</div><h3>Panel de pedidos</h3><p>Tablero claro: Nuevo, Preparando, En camino y Entregado. Sin papeles ni confusiones.</p></div>
+ <div class="c"><div class="i">⚡</div><h3>Automatización</h3><p>Aceptá pedidos y avanzá estados automáticamente. Menos trabajo manual, menos errores.</p></div>
+ <div class="c"><div class="i">📍</div><h3>Seguimiento para el cliente</h3><p>Tus clientes ven en qué etapa está su pedido, sin tener que llamarte.</p></div>
+ <div class="c"><div class="i">📊</div><h3>Estadísticas</h3><p>Pedidos del día, en curso y facturación a un vistazo.</p></div>
+ <div class="c"><div class="i">🤝</div><h3>Tus clientes son tuyos</h3><p>Sin intermediarios: los datos y la relación con tus clientes quedan en tu negocio.</p></div>
+</div></section>
+
+<section><h2>Así de fácil</h2><p class="sub">Listo para vender en tres pasos.</p>
+<div class="g">
+ <div class="c"><div class="n">1</div><h3>Cargamos tu menú</h3><p>Productos, precios y fotos de tu negocio.</p></div>
+ <div class="c"><div class="n">2</div><h3>Personalizamos tu marca</h3><p>Colores, logo y datos de contacto.</p></div>
+ <div class="c"><div class="n">3</div><h3>Empezás a recibir pedidos</h3><p>Compartís tu link por WhatsApp e Instagram.</p></div>
+</div></section>
+
+<section><h2>Calculá cuánto podés ahorrar</h2><p class="sub">Poné tus números y mirá la diferencia.</p>
+<div class="c calc">
+ <label>Pedidos por mes</label><input type="number" id="o" value="400" min="0" oninput="K()">
+ <label>Ticket promedio ($)</label><input type="number" id="t" value="12000" min="0" oninput="K()">
+ <label>Comisión que pagás hoy a apps de delivery (%)</label><input type="number" id="m" value="20" min="0" max="100" oninput="K()">
+ <div class="res"><span class="mu">Hoy pagás en comisiones por mes</span><b id="r1" style="color:var(--ac)"></b>
+ <span class="mu">Ahorro estimado con OrderFlow Pro (ya descontado el plan)</span><b id="r2"></b></div>
+</div></section>
+
+<section id="planes"><h2>Planes</h2><p class="sub">Sin comisiones por pedido. Cancelás cuando quieras.</p>
+<div class="g" id="pl"></div></section>
+
+<div class="cta"><h2 style="color:#fff">¿Listo para vender sin intermediarios?</h2><p style="margin:0 0 16px">Te armamos una demo con el menú de tu negocio.</p>
+<a class="btn" href="#" data-wa="Hola! Quiero una demo de OrderFlow con el menú de mi negocio">💬 Pedir mi demo gratis</a></div>
+<footer>© 2026 OrderFlow · Desarrollado por <b>DabiasTech</b></footer>
+</div>
+<script>
+// ✏️ Editá estos datos antes de compartir la página
+const WA='543364018313', DEMO='orderflow-demo.html';
+const PLANS=[
+ {n:'Starter',p:35000,f:['Menú online con tu marca','Carrito y checkout','Panel de pedidos','Soporte por WhatsApp']},
+ {n:'Pro',p:65000,f:['Todo lo de Starter','Automatización de pedidos','Estadísticas de ventas','Seguimiento para clientes','Cambios de menú ilimitados'],star:1},
+ {n:'Premium',p:110000,f:['Todo lo de Pro','Dominio propio','Varias sucursales','Notificaciones por WhatsApp','Soporte prioritario']}];
+const f=n=>'$'+Math.round(n).toLocaleString('es-AR'),$=s=>document.querySelector(s);
+$('#demo').href=DEMO;
+document.querySelectorAll('[data-wa]').forEach(a=>a.href='https://wa.me/'+WA+'?text='+encodeURIComponent(a.dataset.wa));
+$('#pl').innerHTML=PLANS.map(x=>`<div class="c pl ${x.star?'f':''}">${x.star?'<span class="tag">MÁS ELEGIDO</span>':''}<h3>${x.n}</h3><div class="p">${f(x.p)}<small> /mes</small></div><ul>${x.f.map(i=>`<li>${i}</li>`).join('')}</ul><a class="btn ${x.star?'':'o'}" href="https://wa.me/${WA}?text=${encodeURIComponent('Hola! Me interesa el plan '+x.n+' de OrderFlow')}">Elegir ${x.n}</a></div>`).join('');
+function K(){const c=(+$('#o').value||0)*(+$('#t').value||0)*(+$('#m').value||0)/100;
+ $('#r1').textContent=f(c);const s=c-PLANS[1].p;$('#r2').textContent=s>0?f(s)+' /mes':'$0';}
+K();
+</script></body></html>
