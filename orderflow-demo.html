@@ -7,6 +7,8 @@
 <meta name="description" content="Demo profesional de OrderFlow: menú online, carrito, panel de cocina y automatización. Desarrollado por DabiasTech.">
 <meta name="theme-color" content="#e11d48">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+<link rel="dns-prefetch" href="https://images.unsplash.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -352,20 +354,20 @@ body { padding-bottom: env(safe-area-inset-bottom, 0px); }
 const FEE=1200;
 const COUPONS={BIENVENIDO:0.1,DABIAS:0.15,ENVIOGRATIS:'free_ship'};
 const DEFAULT_PRODUCTS=[
-{id:1,n:'Hamburguesa clásica',c:'Hamburguesas',p:6500,e:'🍔',d:'Carne, lechuga, tomate y salsa de la casa',img:'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=max&w=600&q=70'},
-{id:2,n:'Doble queso',c:'Hamburguesas',p:8200,e:'🍔',d:'Doble medallón y cheddar',badge:'Popular',img:'https://images.unsplash.com/photo-1553979459-d2229ba7433b?auto=format&fit=max&w=600&q=70'},
-{id:3,n:'Pollo crispy',c:'Hamburguesas',p:7000,e:'🍗',d:'Pollo empanado crocante',img:'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=max&w=600&q=70'},
-{id:4,n:'Muzzarella',c:'Pizzas',p:9500,e:'🍕',d:'Salsa y muzzarella',img:'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=max&w=600&q=70'},
-{id:5,n:'Pepperoni',c:'Pizzas',p:11000,e:'🍕',d:'Muzzarella y pepperoni',badge:'Nueva',img:'https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=max&w=600&q=70'},
-{id:6,n:'Fugazzetta',c:'Pizzas',p:10500,e:'🍕',d:'Cebolla y queso',img:'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=max&w=600&q=70'},
-{id:7,n:'Papas fritas',c:'Acompañamientos',p:3200,e:'🍟',d:'Porción generosa',img:'https://images.unsplash.com/photo-1576107233128-de370324a0ee?auto=format&fit=max&w=600&q=70'},
-{id:8,n:'Aros de cebolla',c:'Acompañamientos',p:3800,e:'🧅',d:'6 unidades crocantes',img:'https://images.unsplash.com/photo-1639024471283-0355505955a5?auto=format&fit=max&w=600&q=70'},
-{id:9,n:'Gaseosa 500ml',c:'Bebidas',p:2200,e:'🥤',d:'Línea completa',img:'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=max&w=600&q=70'},
-{id:10,n:'Limonada',c:'Bebidas',p:2500,e:'🍋',d:'Casera 400 ml',img:'https://images.unsplash.com/photo-1523677011786-c03bb72f3f3b?auto=format&fit=max&w=600&q=70'},
-{id:11,n:'Agua 500ml',c:'Bebidas',p:1500,e:'💧',d:'Sin gas',img:'https://images.unsplash.com/photo-1548832633-d4b5c6c0b0f1?auto=format&fit=max&w=600&q=70'},
-{id:12,n:'Brownie',c:'Postres',p:3800,e:'🍫',d:'Con nuez',img:'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=max&w=600&q=70'},
-{id:13,n:'Helado',c:'Postres',p:3500,e:'🍦',d:'2 bochas',img:'https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=max&w=600&q=70'},
-{id:14,n:'Flan casero',c:'Postres',p:3200,e:'🍮',d:'Con dulce de leche',img:'https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=max&w=600&q=70'}
+{id:1,n:'Hamburguesa clásica',c:'Hamburguesas',p:6500,e:'🍔',d:'Carne, lechuga, tomate y salsa de la casa',img:'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=max&w=400&q=65'},
+{id:2,n:'Doble queso',c:'Hamburguesas',p:8200,e:'🍔',d:'Doble medallón y cheddar',badge:'Popular',img:'https://images.unsplash.com/photo-1553979459-d2229ba7433b?auto=format&fit=max&w=400&q=65'},
+{id:3,n:'Pollo crispy',c:'Hamburguesas',p:7000,e:'🍗',d:'Pollo empanado crocante',img:'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=max&w=400&q=65'},
+{id:4,n:'Muzzarella',c:'Pizzas',p:9500,e:'🍕',d:'Salsa y muzzarella',img:'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=max&w=400&q=65'},
+{id:5,n:'Pepperoni',c:'Pizzas',p:11000,e:'🍕',d:'Muzzarella y pepperoni',badge:'Nueva',img:'https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=max&w=400&q=65'},
+{id:6,n:'Fugazzetta',c:'Pizzas',p:10500,e:'🍕',d:'Cebolla y queso',img:'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=max&w=400&q=65'},
+{id:7,n:'Papas fritas',c:'Acompañamientos',p:3200,e:'🍟',d:'Porción generosa',img:'https://images.unsplash.com/photo-1576107233128-de370324a0ee?auto=format&fit=max&w=400&q=65'},
+{id:8,n:'Aros de cebolla',c:'Acompañamientos',p:3800,e:'🧅',d:'6 unidades crocantes',img:'https://images.unsplash.com/photo-1639024471283-0355505955a5?auto=format&fit=max&w=400&q=65'},
+{id:9,n:'Gaseosa 500ml',c:'Bebidas',p:2200,e:'🥤',d:'Línea completa',img:'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=max&w=400&q=65'},
+{id:10,n:'Limonada',c:'Bebidas',p:2500,e:'🍋',d:'Casera 400 ml',img:'https://images.unsplash.com/photo-1523677011786-c03bb72f3f3b?auto=format&fit=max&w=400&q=65'},
+{id:11,n:'Agua 500ml',c:'Bebidas',p:1500,e:'💧',d:'Sin gas',img:'https://images.unsplash.com/photo-1548832633-d4b5c6c0b0f1?auto=format&fit=max&w=400&q=65'},
+{id:12,n:'Brownie',c:'Postres',p:3800,e:'🍫',d:'Con nuez',img:'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=max&w=400&q=65'},
+{id:13,n:'Helado',c:'Postres',p:3500,e:'🍦',d:'2 bochas',img:'https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=max&w=400&q=65'},
+{id:14,n:'Flan casero',c:'Postres',p:3200,e:'🍮',d:'Con dulce de leche',img:'https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=max&w=400&q=65'}
 ];
 const ST=['Nuevo','Preparando','En camino','Entregado'];
 const NX=['Aceptar','Salir a entregar','Marcar entregado'];
@@ -387,7 +389,7 @@ function G(){
 $('#ch').innerHTML=cats().map(c=>`<button type="button" class="chip ${c===cat?'on':''}" onclick="cat='${String(c).replace(/'/g,"\\'")}';G()">${esc(c)}</button>`).join('');
 const list=P.filter(x=>(cat==='Todos'||x.c===cat)&&(x.n+' '+(x.d||'')).toLowerCase().includes(q.toLowerCase()));
 if(!list.length){$('#gr').innerHTML='<p class="empty">No hay productos en esta categoría.</p>';return}
-$('#gr').innerHTML=list.map((x,i)=>`<article class="pc reveal-in" style="animation-delay:${Math.min(i,8)*0.05}s"><div class="pc-top">${x.badge?`<span class="pc-badge">${esc(x.badge)}</span>`:''}${x.img?`<span class="img-skel"></span><img src="${x.img}" alt="${esc(x.n)}" loading="lazy" decoding="async" width="600" height="600" onload="this.classList.add('loaded');this.previousElementSibling&&this.previousElementSibling.remove()">`:`<span class="pc-emoji">${x.e||'🍽️'}</span>`}</div><div class="pc-body"><span class="pc-cat">${esc(x.c)}</span><div class="pc-name">${esc(x.n)}</div><div class="pc-desc">${esc(x.d||'')}</div><div class="pc-price">${f(x.p)}</div><button type="button" class="btn btn-p" onclick="add(${x.id},1)">Agregar</button></div></article>`).join('');
+$('#gr').innerHTML=list.map((x,i)=>`<article class="pc reveal-in" style="animation-delay:${Math.min(i,8)*0.05}s"><div class="pc-top">${x.badge?`<span class="pc-badge">${esc(x.badge)}</span>`:''}${x.img?`<span class="img-skel"></span><img src="${x.img}" alt="${esc(x.n)}" loading="lazy" decoding="async" width="400" height="400" onload="this.classList.add('loaded');this.previousElementSibling&&this.previousElementSibling.remove()">`:`<span class="pc-emoji">${x.e||'🍽️'}</span>`}</div><div class="pc-body"><span class="pc-cat">${esc(x.c)}</span><div class="pc-name">${esc(x.n)}</div><div class="pc-desc">${esc(x.d||'')}</div><div class="pc-price">${f(x.p)}</div><button type="button" class="btn btn-p" onclick="add(${x.id},1)">Agregar</button></div></article>`).join('');
 }
 function add(id,d){cart[id]=(cart[id]||0)+d;if(cart[id]<=0)delete cart[id];sv('cart',cart);C();if(d>0)toast('Agregado al pedido')}
 function subtotal(){return Object.entries(cart).reduce((s,[id,n])=>{const p=P.find(x=>x.id==id);return s+(p?p.p*n:0)},0)}
@@ -424,89 +426,21 @@ function clr(){if(!confirm('¿Borrar todos los pedidos?'))return;orders=[];sv('o
 function adv(id){const o=orders.find(x=>x.id===id);if(o&&o.st<3){o.st++;o.t=Date.now();sv('orders',orders);R();toast('#'+id+' → '+ST[o.st])}}
 function cancelOrder(id){if(!confirm('¿Cancelar pedido #'+id+'?'))return;orders=orders.filter(o=>o.id!==id);sv('orders',orders);R();toast('Pedido cancelado')}
 function waOrder(id){const o=orders.find(x=>x.id===id);if(!o)return;const msg=`Hola ${o.n}! Tu pedido #${o.id} está: ${ST[o.st]}. Total ${f(o.tot)}.`;let phone=(o.phone||'').replace(/\D/g,'');if(!phone.startsWith('54'))phone='54'+phone.replace(/^0/,'');window.open('https://wa.me/'+phone+'?text='+encodeURIComponent(msg),'_blank')}
-function printTicket(id){const o=orders.find(x=>x.id===id);if(!o)return;const w=window.open('','', 'width=360,height=600');w.document.write(`<!DOCTYPE html><html><head><title>Ticket #${o.id}</title><style>body{font:14px/1.4 system-ui;padding:20px}h1{font-size:16px}
-.pc-top img{width:100%;height:100%;object-fit:cover;display:block}
-.pc-emoji{font-size:48px;line-height:1}
-.pc-top{overflow:hidden;background:#e8e8ed}
-html[data-theme="dark"] .pc-top{background:#2c2c2e}
-
-.cart-left{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
-.cart-thumb{width:40px;height:40px;border-radius:8px;object-fit:cover;flex-shrink:0;background:var(--bg)}
-.cart-left>span{font-size:13px;font-weight:500}
-
-/* —— Loading / skeletons —— */
-@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes spin{to{transform:rotate(360deg)}}
-@keyframes scaleIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
-
-.page-loader{
-  position:fixed;inset:0;z-index:200;
-  background:var(--bg);display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:16px;
-  transition:opacity .45s var(--ease),visibility .45s;
+function printTicket(id){
+  const o=orders.find(x=>x.id===id);if(!o)return;
+  const w=window.open('','', 'width=360,height=600');
+  if(!w){toast('Permití ventanas emergentes');return}
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Ticket #${o.id}</title>
+<style>body{font:14px/1.45 system-ui,sans-serif;padding:20px;color:#111}h1{font-size:16px;margin:0 0 8px}hr{border:none;border-top:1px solid #ddd;margin:12px 0}ul{padding-left:18px;margin:8px 0}</style></head><body>
+<h1>OrderFlow · #${o.id}</h1>
+<p>${esc(o.n)} · ${esc(o.phone)}<br>${esc(o.a)}<br>${esc(o.pay)}</p><hr>
+<ul>${o.it.map(i=>`<li>${i.q}× ${esc(i.n)} — ${f(i.p*i.q)}</li>`).join('')}</ul>
+<p>Envío ${f(o.fee||0)} · Desc ${f(o.disc||0)}<br><b>Total ${f(o.tot)}</b></p>
+${o.notes?`<p>Notas: ${esc(o.notes)}</p>`:''}
+<p style="color:#666;font-size:12px">${new Date(o.t).toLocaleString('es-AR')}</p>
+<script>print();<\/script></body></html>`);
+  w.document.close();
 }
-.page-loader.hide{opacity:0;visibility:hidden;pointer-events:none}
-.page-loader .logo-mark{width:48px;height:48px;border-radius:14px;font-size:22px}
-.loader-bar{
-  width:120px;height:3px;border-radius:3px;overflow:hidden;background:var(--bd);
-}
-.loader-bar i{
-  display:block;height:100%;width:40%;border-radius:3px;background:var(--ac);
-  animation:loaderSlide 1s ease-in-out infinite;
-}
-@keyframes loaderSlide{
-  0%{transform:translateX(-100%)}
-  50%{transform:translateX(200%)}
-  100%{transform:translateX(-100%)}
-}
-.loader-txt{font-size:13px;color:var(--mu);font-weight:500}
-
-.skel{
-  background:linear-gradient(90deg,var(--bd) 25%,color-mix(in srgb,var(--bd) 40%,var(--bg-elev)) 50%,var(--bd) 75%);
-  background-size:200% 100%;animation:shimmer 1.2s ease-in-out infinite;
-  border-radius:var(--radius);
-}
-.skel-card{height:280px}
-.skel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:14px}
-
-.pc.reveal-in{
-  opacity:0;animation:fadeUp .55s var(--ease) forwards;
-}
-.pc-top img{
-  opacity:0;transition:opacity .4s ease;
-}
-.pc-top img.loaded{opacity:1}
-.pc-top .img-skel{
-  position:absolute;inset:0;z-index:1;
-  background:linear-gradient(90deg,#e8e8ed 25%,#f5f5f7 50%,#e8e8ed 75%);
-  background-size:200% 100%;animation:shimmer 1.1s ease-in-out infinite;
-}
-html[data-theme="dark"] .pc-top .img-skel{
-  background:linear-gradient(90deg,#2c2c2e 25%,#3a3a3c 50%,#2c2c2e 75%);
-  background-size:200% 100%;
-}
-
-.btn.loading{pointer-events:none;opacity:.85;position:relative;color:transparent!important}
-.btn.loading::after{
-  content:"";position:absolute;left:50%;top:50%;
-  width:18px;height:18px;margin:-9px 0 0 -9px;
-  border:2px solid rgba(255,255,255,.35);border-top-color:#fff;
-  border-radius:50%;animation:spin .7s linear infinite;
-}
-.btn-s.loading::after{border-color:rgba(0,0,0,.15);border-top-color:var(--tx)}
-html[data-theme="dark"] .btn-s.loading::after{border-color:rgba(255,255,255,.2);border-top-color:var(--tx)}
-
-.card.fade-in{animation:scaleIn .5s var(--ease) both}
-.store-head.fade-in{animation:fadeUp .5s var(--ease) both}
-
-@media(prefers-reduced-motion:reduce){
-  .page-loader,.skel,.pc.reveal-in,.pc-top img,.card.fade-in,.store-head.fade-in{animation:none!important;opacity:1!important;transform:none!important}
-  .page-loader{display:none}
-  .pc-top img{opacity:1}
-}
-</style></head><body><h1>OrderFlow · #${o.id}</h1><p>${esc(o.n)} · ${esc(o.phone)}<br>${esc(o.a)}<br>${esc(o.pay)}</p><hr><ul>${o.it.map(i=>`<li>${i.q}× ${esc(i.n)} — ${f(i.p*i.q)}</li>`).join('')}</ul><p>Envío ${f(o.fee||0)} · Desc ${f(o.disc||0)}<br><b>Total ${f(o.tot)}</b></p>${o.notes?`<p>Notas: ${esc(o.notes)}</p>`:''}<p>${new Date(o.t).toLocaleString('es-AR')}</p><script>print();<\/script></body></html>`);w.document.close()}
 function A(k,v){auto[k]=v;sv('auto',auto)}
 function ago(ts){const s=Math.floor((Date.now()-ts)/1000);if(s<60)return'hace '+s+'s';if(s<3600)return'hace '+Math.floor(s/60)+' min';return'hace '+Math.floor(s/3600)+' h'}
 function MO(){const mine=orders.slice(0,8);$('#mo').innerHTML=mine.length?mine.map(o=>`<div class="order-row"><div class="row"><b>#${o.id}</b><span class="badge-st ${o.st===0?'new':o.st===3?'ok':''}">${ST[o.st]}</span></div><div style="font-size:13px;color:var(--mu)">${f(o.tot)} · ${esc(o.pay)}</div><div class="steps">${ST.map((_,i)=>`<i class="${i<=o.st?'on':''}"></i>`).join('')}</div><div class="time">${ago(o.t)}</div></div>`).join(''):'<p class="empty">Todavía no hay pedidos.</p>'}
@@ -530,7 +464,7 @@ try{const t=localStorage.getItem('of2_theme');if(t==='dark'||t==='light')documen
 $('#gr').innerHTML='<div class="skel-grid">'+Array.from({length:8},()=>'<div class="skel skel-card"></div>').join('')+'</div>';
 $('.store-head')?.classList.add('fade-in');
 $$('.card').forEach((el,i)=>{el.classList.add('fade-in');el.style.animationDelay=(0.08+i*0.06)+'s'});
-setTimeout(()=>{G();C();R();const pl=$('#pageLoader');if(pl){pl.classList.add('hide');pl.setAttribute('aria-busy','false')}},480);
+setTimeout(()=>{G();C();R();const pl=$('#pageLoader');if(pl){pl.classList.add('hide');pl.setAttribute('aria-busy','false')}},320);
 
 </script>
 </body>

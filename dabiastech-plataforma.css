@@ -779,33 +779,28 @@ nav .l:focus-visible {
 }
 
 
-/* Inter */
-body { font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif; }
-
-/* OrderFlow showcase */
+/* OrderFlow showcase (estructura, sin cambiar el resto del diseño) */
 .of-banner {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
-  padding: 28px;
+  gap: 20px;
+  padding: 24px;
   border: 1px solid var(--bd);
   border-radius: var(--radius-lg);
   background: var(--bg2);
+  margin-top: 8px;
 }
-.of-banner-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
+.of-banner-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.of-banner-actions a.btn { text-decoration: none; }
 .of-preview-card {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  min-width: 180px;
-  padding: 18px 20px;
-  border-radius: 14px;
+  min-width: 160px;
+  padding: 16px 18px;
+  border-radius: var(--radius);
   border: 1px solid var(--bd);
   background: var(--card);
   position: relative;
@@ -818,33 +813,13 @@ body { font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helv
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: #e11d48;
-  background: rgba(225, 29, 72, 0.1);
+  color: var(--ac);
+  background: color-mix(in srgb, var(--ac) 12%, transparent);
   padding: 3px 8px;
   border-radius: 999px;
 }
-.of-preview-card strong {
-  font-size: 16px;
-  letter-spacing: -0.02em;
-}
+nav .r a.btn { text-decoration: none; }
 
-/* Nav links as buttons */
-nav .r a.btn {
-  text-decoration: none;
-}
-
-/* Light visual polish */
-.w { max-width: 1040px; }
-.hero { padding: 96px 0 80px; }
-section { padding: 80px 0; }
-.c:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow);
-}
-
-@media (max-width: 640px) {
-  .of-banner { padding: 20px; }
-  .of-preview { width: 100%; }
-  .of-preview-card { width: 100%; }
-  nav .r a.btn.sm { display: none; } /* hide OrderFlow nav on very small — section remains */
-}
+/* Perf: no visual change */
+section { content-visibility: auto; contain-intrinsic-size: 1px 520px; }
+.hero, nav, footer, #orderflow { content-visibility: visible; }
