@@ -823,3 +823,76 @@ nav .r a.btn { text-decoration: none; }
 /* Perf: no visual change */
 section { content-visibility: auto; contain-intrinsic-size: 1px 520px; }
 .hero, nav, footer, #orderflow { content-visibility: visible; }
+
+
+/* —— Herramientas integradas —— */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 8px;
+}
+@media (max-width: 720px) {
+  .tools-grid { grid-template-columns: 1fr; }
+}
+.tool-card {
+  background: var(--card);
+  border: 1px solid var(--bd);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  transition: border-color .25s, transform .3s var(--ease-out), box-shadow .3s;
+}
+.tool-card:hover {
+  border-color: color-mix(in srgb, var(--ac) 35%, var(--bd));
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+.tool-icon {
+  font-size: 28px;
+  margin-bottom: 12px;
+  line-height: 1;
+}
+.tool-card h3 {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px;
+}
+.tool-card > p {
+  color: var(--mu);
+  font-size: 14px;
+  line-height: 1.55;
+  margin: 0 0 14px;
+  flex: 1;
+}
+.tool-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+  font-size: 13px;
+  color: var(--mu);
+}
+.tool-list li {
+  padding: 5px 0 5px 20px;
+  position: relative;
+}
+.tool-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--ac);
+  font-weight: 600;
+}
+.tool-card .btn {
+  align-self: flex-start;
+  text-decoration: none;
+}
+.tool-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tool-actions .btn { text-decoration: none; }
+.hero-actions a.btn { text-decoration: none; }
