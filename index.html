@@ -150,8 +150,9 @@
 </a>
 
 <script>
-const SUPABASE_URL  = 'https://TU-PROYECTO.supabase.co';
-const SUPABASE_ANON = 'TU_ANON_KEY_AQUI';
+// ── Supabase: Project Settings → API → Project URL + anon public (JWT que empieza con eyJ...) ──
+const SUPABASE_URL  = 'https://ykxrkiklhpcmxtfgwfla.supabase.co';
+const SUPABASE_ANON = 'TU_ANON_KEY_AQUI'; // ← pegá la key "anon" / "public" (eyJ...), NO solo la Publishable
 const WA = '543364018313';
 const IG = 'https://instagram.com/dabiastech';
 const TT = 'https://www.tiktok.com/@dabiastech';
@@ -187,12 +188,30 @@ function slugify(str) {
   return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') || 'tienda';
 }
 
+function sbConfigured() {
+  return SUPABASE_URL && !SUPABASE_URL.includes('TU-PROYECTO')
+    && SUPABASE_ANON && SUPABASE_ANON !== 'TU_ANON_KEY_AQUI'
+    && SUPABASE_ANON.length > 40;
+}
 let sb = null;
 try {
-  if (typeof supabase !== 'undefined') {
+  if (typeof supabase !== 'undefined' && sbConfigured()) {
     sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+  } else if (!sbConfigured()) {
+    console.warn('Supabase: faltan URL o anon key reales en el HTML');
   }
 } catch (e) { console.warn('Supabase init', e); }
+function mapAuthError(err) {
+  const m = (err && (err.message || String(err))) || 'Error de conexión';
+  if (/failed to fetch|networkerror|load failed|network request failed/i.test(m)) {
+    return 'No se pudo conectar con Supabase. Usá la key anon JWT (eyJ...) de Settings → API, guardá, redeploy en Netlify y no abras el HTML como archivo local.';
+  }
+  if (/invalid api key|invalid jwt|jwt/i.test(m)) {
+    return 'API key inválida. En Settings → API copiá "anon" / "public" (empieza con eyJ...), no solo Publishable.';
+  }
+  if (m === 'Invalid login credentials') return 'Email o contraseña incorrectos';
+  return m;
+}
 
 let me = null, profile = null, sites = [], view = 'home', isAdm = false, wz = {c: COL[0]}, nx = null, loading = false;
 
@@ -334,12 +353,18 @@ async function doLogin() {
   const email = $('ae').value.trim().toLowerCase();
   const pass  = $('ap').value;
   if (!email || !pass) return showErr('Completá email y contraseña');
+  if (!sb) return showErr(mapAuthError({ message: 'Failed to fetch' }));
   setLoading(true);
-  const { error } = await sb.auth.signInWithPassword({ email, password: pass });
-  setLoading(false);
-  if (error) return showErr(error.message === 'Invalid login credentials' ? 'Email o contraseña incorrectos' : error.message);
-  cm(); view = 'dash'; R(); toast('¡Bienvenido/a!');
-  if (nx) { const k = nx; nx = null; wiz(k); }
+  try {
+    const { error } = await sb.auth.signInWithPassword({ email, password: pass });
+    setLoading(false);
+    if (error) return showErr(mapAuthError(error));
+    cm(); view = 'dash'; R(); toast('¡Bienvenido/a!');
+    if (nx) { const k = nx; nx = null; wiz(k); }
+  } catch (e) {
+    setLoading(false);
+    showErr(mapAuthError(e));
+  }
 }
 async function doRegister() {
   const name  = $('an')?.value.trim();
@@ -348,13 +373,19 @@ async function doRegister() {
   if (!name) return showErr('Ingresá tu nombre');
   if (!/^\S+@\S+\.\S+$/.test(email)) return showErr('Email inválido');
   if (pass.length < 6) return showErr('La contraseña debe tener al menos 6 caracteres');
+  if (!sb) return showErr(mapAuthError({ message: 'Failed to fetch' }));
   setLoading(true);
-  const { data, error } = await sb.auth.signUp({ email, password: pass, options: { data: { name } } });
-  setLoading(false);
-  if (error) return showErr(error.message);
-  if (data.user && !data.session) { toast('Revisá tu email para confirmar la cuenta'); cm(); return; }
-  cm(); view = 'dash'; R(); toast('¡Cuenta creada! Bienvenido/a, ' + name);
-  if (nx) { const k = nx; nx = null; wiz(k); }
+  try {
+    const { data, error } = await sb.auth.signUp({ email, password: pass, options: { data: { name } } });
+    setLoading(false);
+    if (error) return showErr(mapAuthError(error));
+    if (data.user && !data.session) { toast('Revisá tu email para confirmar la cuenta'); cm(); return; }
+    cm(); view = 'dash'; R(); toast('¡Cuenta creada! Bienvenido/a, ' + name);
+    if (nx) { const k = nx; nx = null; wiz(k); }
+  } catch (e) {
+    setLoading(false);
+    showErr(mapAuthError(e));
+  }
 }
 function showErr(m) { const e = $('aerr'); if (e) e.textContent = m; }
 function setLoading(v) {
