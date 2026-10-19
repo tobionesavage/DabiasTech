@@ -7,8 +7,7 @@
 <meta name="description" content="Creá la tienda online de tu negocio en minutos. Sin comisiones por venta. Planes desde Starter hasta Premium.">
 <meta name="color-scheme" content="light dark">
 <title>DabiasTech · Creá la tienda online de tu negocio</title>
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
 <link rel="stylesheet" href="dabiastech-plataforma.css">
 </head>
 <body id="top">
@@ -151,8 +150,8 @@
 
 <script>
 // ── Supabase: Project Settings → API → Project URL + anon public (JWT que empieza con eyJ...) ──
-const SUPABASE_URL  = 'https://ykxrkiklhpcmxtfgwfla.supabase.co';
-const SUPABASE_ANON = 'TU_ANON_KEY_AQUI'; // ← pegá la key "anon" / "public" (eyJ...), NO solo la Publishable
+const SUPABASE_URL  = 'https://ykxrkiklhpcmxtrgwfla.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlreHJraWtsaHBjbXh0cmd3ZmxhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyODMyNjEsImV4cCI6MjEwNzg1OTI2MX0.dhnLmFeFg7ZhQ5vTomRR1nQkJ7jSP8M8CjXegdVPbBQ';
 const WA = '543364018313';
 const IG = 'https://instagram.com/dabiastech';
 const TT = 'https://www.tiktok.com/@dabiastech';
@@ -189,28 +188,56 @@ function slugify(str) {
 }
 
 function sbConfigured() {
-  return SUPABASE_URL && !SUPABASE_URL.includes('TU-PROYECTO')
-    && SUPABASE_ANON && SUPABASE_ANON !== 'TU_ANON_KEY_AQUI'
-    && SUPABASE_ANON.length > 40;
+  return !!(SUPABASE_URL && SUPABASE_ANON && SUPABASE_ANON.length > 40
+    && !SUPABASE_URL.includes('TU-PROYECTO')
+    && SUPABASE_ANON !== 'TU_ANON_KEY_AQUI');
+}
+function getSupabaseLib() {
+  const g = typeof window !== 'undefined' ? window : globalThis;
+  return g.supabase || g.Supabase || null;
+}
+function createSbClient() {
+  if (!sbConfigured()) return null;
+  const lib = getSupabaseLib();
+  if (!lib) return null;
+  const create = lib.createClient || (lib.default && lib.default.createClient);
+  if (typeof create !== 'function') return null;
+  return create.call(lib, SUPABASE_URL, SUPABASE_ANON, {
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+  });
 }
 let sb = null;
-try {
-  if (typeof supabase !== 'undefined' && sbConfigured()) {
-    sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
-  } else if (!sbConfigured()) {
-    console.warn('Supabase: faltan URL o anon key reales en el HTML');
-  }
-} catch (e) { console.warn('Supabase init', e); }
+try { sb = createSbClient(); } catch (e) { console.warn('Supabase init', e); }
+
 function mapAuthError(err) {
   const m = (err && (err.message || String(err))) || 'Error de conexión';
   if (/failed to fetch|networkerror|load failed|network request failed/i.test(m)) {
-    return 'No se pudo conectar con Supabase. Usá la key anon JWT (eyJ...) de Settings → API, guardá, redeploy en Netlify y no abras el HTML como archivo local.';
+    if (location.protocol === 'file:') return 'Estás abriendo el HTML como archivo local. Subilo a Netlify y abrí la URL https://…';
+    return 'El navegador no pudo hablar con Supabase. Desactivá bloqueadores y mirá F12 → Network.';
   }
-  if (/invalid api key|invalid jwt|jwt/i.test(m)) {
-    return 'API key inválida. En Settings → API copiá "anon" / "public" (empieza con eyJ...), no solo Publishable.';
-  }
+  if (/invalid api key|invalid jwt|jwt/i.test(m)) return 'API key inválida.';
   if (m === 'Invalid login credentials') return 'Email o contraseña incorrectos';
   return m;
+}
+function ensureSb() {
+  if (!sb) {
+    try { sb = createSbClient(); } catch (e) { console.warn(e); }
+  }
+  if (sb) return true;
+  if (location.protocol === 'file:') {
+    showErr('No uses archivo local. Abrí el sitio en Netlify (https://…).');
+    return false;
+  }
+  if (!sbConfigured()) {
+    showErr('Falta la anon key en este deploy.');
+    return false;
+  }
+  if (!getSupabaseLib()) {
+    showErr('No cargó la librería de Supabase (CDN). Desactivá adblock y recargá con Ctrl+Shift+R.');
+    return false;
+  }
+  showErr('Supabase no inicializó. Abrí F12 → Console y recargá.');
+  return false;
 }
 
 let me = null, profile = null, sites = [], view = 'home', isAdm = false, wz = {c: COL[0]}, nx = null, loading = false;
@@ -223,6 +250,7 @@ async function init() {
   try {
     const { data: { session } } = await sb.auth.getSession();
     if (session) { me = session.user; await loadProfile(); await loadSites(); R(); }
+    handleMpReturn();
     sb.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_IN' && session) { me = session.user; await loadProfile(); await loadSites(); R(); }
       else if (event === 'SIGNED_OUT') { me = null; profile = null; sites = []; isAdm = false; R(); }
@@ -239,13 +267,26 @@ async function loadProfile() {
 }
 async function loadSites() {
   if (!me || !sb) return;
-  const { data, error } = await sb.from('sites').select('*').order('created_at', { ascending: false });
-  if (error) { console.error(error); toast('Error al cargar sitios'); return; }
-  sites = data || [];
+  let q = sb.from('sites').select('*').order('created_at', { ascending: false });
+  // Si no es admin, filtrar por dueño (evita 403 raros de RLS)
+  if (!isAdm) q = q.eq('owner_id', me.id);
+  const { data, error } = await q;
+  if (error) {
+    console.error('loadSites', error);
+    // reintento sin filtro admin
+    const retry = await sb.from('sites').select('*').eq('owner_id', me.id).order('created_at', { ascending: false });
+    if (retry.error) { toast('Error al cargar sitios'); return; }
+    sites = retry.data || [];
+  } else {
+    sites = data || [];
+  }
   const now = new Date().toISOString();
   for (const s of sites) {
     if (s.status === 'act' && s.valid_until && s.valid_until < now) {
-      await sb.from('sites').update({ status: 'pend' }).eq('id', s.id); s.status = 'pend';
+      try {
+        await sb.from('sites').update({ status: 'pend' }).eq('id', s.id);
+        s.status = 'pend';
+      } catch (e) { console.warn('expire site', e); }
     }
   }
 }
@@ -353,7 +394,7 @@ async function doLogin() {
   const email = $('ae').value.trim().toLowerCase();
   const pass  = $('ap').value;
   if (!email || !pass) return showErr('Completá email y contraseña');
-  if (!sb) return showErr(mapAuthError({ message: 'Failed to fetch' }));
+  if (!ensureSb()) return;
   setLoading(true);
   try {
     const { error } = await sb.auth.signInWithPassword({ email, password: pass });
@@ -373,7 +414,7 @@ async function doRegister() {
   if (!name) return showErr('Ingresá tu nombre');
   if (!/^\S+@\S+\.\S+$/.test(email)) return showErr('Email inválido');
   if (pass.length < 6) return showErr('La contraseña debe tener al menos 6 caracteres');
-  if (!sb) return showErr(mapAuthError({ message: 'Failed to fetch' }));
+  if (!ensureSb()) return;
   setLoading(true);
   try {
     const { data, error } = await sb.auth.signUp({ email, password: pass, options: { data: { name } } });
@@ -443,11 +484,47 @@ function pay(id) {
     <div class="row" style="font-size:24px;font-weight:700;margin:14px 0;letter-spacing:-0.02em">
       <span>Total</span><span>${f(p.p)}</span>
     </div>
-    <p class="mu sm">Se activa por 30 días. Medio de pago: Mercado Pago.</p>
-    <p class="mu sm" style="margin-top:8px">⚠️ En esta versión el pago está <b>simulado</b>.</p>
-    <button class="btn ac" style="width:100%;margin-top:8px" onclick="simulatePay('${id}')">Pagar con Mercado Pago (demo)</button>
+    <p class="mu sm">Se activa por 30 días al acreditarse el pago con Mercado Pago.</p>
+    <button class="btn ac" style="width:100%;margin-top:12px" id="mpPayBtn" onclick="startMpPay('${id}')">Pagar con Mercado Pago</button>
     <button class="btn o" style="width:100%;margin-top:8px" onclick="cm()">Pagar después</button>
+    <p class="mu sm" style="margin-top:12px;text-align:center">Serás redirigido a Mercado Pago de forma segura.</p>
   `);
+}
+async function startMpPay(id) {
+  if (!ensureSb()) return;
+  const btn = $('mpPayBtn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Conectando con Mercado Pago…'; }
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) throw new Error('Sesión expirada. Volvé a ingresar.');
+    const { data, error } = await sb.functions.invoke('mp-checkout', {
+      body: { site_id: id },
+      headers: {
+        Authorization: `Bearer ${session.access_token}`,
+      },
+    });
+    if (error) throw error;
+    const payload = typeof data === 'string' ? JSON.parse(data) : data;
+    if (payload?.error) throw new Error(payload.error);
+    if (!payload?.init_point) throw new Error('No se recibió el link de pago');
+    toast('Redirigiendo a Mercado Pago…');
+    window.location.href = payload.init_point;
+  } catch (e) {
+    console.error(e);
+    const msg = (e && (e.message || e.context || String(e))) || 'Error al iniciar el pago';
+    if (btn) { btn.disabled = false; btn.textContent = 'Pagar con Mercado Pago'; }
+    // Fallback demo solo si la función no está deployada
+    if (/Failed to send|not found|FunctionsRelayError|404|500/i.test(msg) || /Falta MP_ACCESS_TOKEN/i.test(msg)) {
+      om(`
+        <h3>Mercado Pago aún no está configurado</h3>
+        <p class="mu sm">Falta deploy de la Edge Function o el Access Token. Mientras tanto podés simular el pago (solo pruebas).</p>
+        <button class="btn ac" style="width:100%;margin-top:10px" onclick="simulatePay('${id}')">Simular pago (demo)</button>
+        <button class="btn o" style="width:100%;margin-top:8px" onclick="cm()">Cerrar</button>
+      `);
+      return;
+    }
+    toast(msg);
+  }
 }
 async function simulatePay(id) {
   const until = new Date(); until.setDate(until.getDate() + 30);
@@ -455,7 +532,26 @@ async function simulatePay(id) {
   if (error) { toast('Error al activar'); return; }
   const s = sites.find(x => x.id === id);
   if (s) { s.status = 'act'; s.valid_until = until.toISOString(); }
-  cm(); R(); toast('¡Pago aprobado! Tu sitio está activo ✅');
+  cm(); R(); toast('¡Pago simulado! Sitio activo 30 días');
+}
+function handleMpReturn() {
+  try {
+    const q = new URLSearchParams(location.search);
+    const mp = q.get('mp');
+    if (!mp) return;
+    const site = q.get('site');
+    if (mp === 'success') {
+      toast('¡Pago recibido! Activando tu sitio…');
+      if (sb && me) loadSites().then(() => { view = 'dash'; R(); });
+    } else if (mp === 'pending') {
+      toast('Pago pendiente. Te avisamos cuando se acredite.');
+    } else if (mp === 'failure') {
+      toast('El pago no se completó. Podés intentar de nuevo.');
+    }
+    // limpiar query sin recargar de más
+    const url = location.pathname + (location.hash || '');
+    history.replaceState({}, '', url);
+  } catch (e) {}
 }
 function chp(id) {
   const s = sites.find(x => x.id === id); if (!s) return;
